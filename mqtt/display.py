@@ -13,7 +13,7 @@ client = paho.Client()
 client.on_connect = on_connect
 client.on_subscribe = on_subscribe
 client.on_message = on_message
-client.connect("broker.hivemq.com", 1883)
+client.connect("localhost", 1883)
 client.subscribe("mr/time",2)
 
 client.loop_forever()
