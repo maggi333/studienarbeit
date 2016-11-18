@@ -2,7 +2,8 @@ import sys
 from PyQt5.QtWidgets import QDialog, QApplication
 from design import Ui_Dialog
 
-from mqtt_publisher import Publisher
+from mqtt_publisher import MQTTPublisher
+from coap_client import CoAPClient
 
 
 class ImageDialog(QDialog):
@@ -42,11 +43,23 @@ class ImageDialog(QDialog):
         QoS = int(self.ui.lineEdit_4.text())
 
         # Starte Verbindung
-        self.publisher = Publisher(packet_size, cycle_time, count, QoS, self.ui)
-        self.publisher.start_connect()
+        if self.ui.mqttButton.isChecked():
 
-        # Anzeigen der Auswetung
-        self.ui.pingLabel.setText(str(self.publisher.calc_latency()) + ' s')
+            self.publisher = MQTTPublisher(packet_size, cycle_time, count, QoS, self.ui)
+            self.publisher.start_connect()
+
+            # Anzeigen der Auswetung
+            self.ui.pingLabel.setText(str(self.publisher.calc_latency()) + ' s')
+
+        elif self.ui.coapButton.isChecked():
+
+            self.client = CoAPClient(packet_size, cycle_time, count, self.ui)
+            self.client.start_connect()
+
+
+        else:
+            print('Error: No Protocol selected')
+            sys.exit(2)
 
         self.ui.progressBar.setValue(100)
 

@@ -17,7 +17,7 @@ def on_publish(client, userdata, mid):
     print("mid: " + str(mid))
 
 
-class Publisher():
+class MQTTPublisher():
     def __init__(self, packet_size, cycle_time, count, QoS, ui):
         self.cycle_time = cycle_time
         self.packet_size = packet_size
@@ -32,7 +32,7 @@ class Publisher():
         for item in latency:
             sum = sum + item
             i += 1
-        return round(sum / i, 3)
+        return round(sum / i, 6)
 
     def start_connect(self):
         testfile = bytearray(b'\x00' * self.packet_size)
