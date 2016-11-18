@@ -18,16 +18,24 @@ def on_publish(client, userdata, mid):
 
 
 class Publisher():
+    def __init__(self, packet_size, cycle_time, count, QoS, ui):
+        self.cycle_time = cycle_time
+        self.packet_size = packet_size
+        self.count = count
+        self.QoS = QoS
+        self.ui = ui
+
+
     def calc_latency(self):
         sum = 0
         i = 0
         for item in latency:
             sum = sum + item
             i += 1
-        return sum / i
+        return round(sum / i, 3)
 
     def start_connect(self):
-        testfile = bytearray(b'\x00' * 1024 * 1024)
+        testfile = bytearray(b'\x00' * self.packet_size)
 
         client = paho.Client()
         client.on_connect = on_connect
@@ -36,10 +44,11 @@ class Publisher():
 
         client.loop_start()
 
-        for counter in range(1, 5):
+        for counter in range(1, self.count):
             # timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
             # (rc, mid) = client.publish("mr/time", timestamp, 2)
             timestamps.append(time.time())
-            (rc, mid) = client.publish("mr/time", testfile, 1)
+            (rc, mid) = client.publish("mr/time", testfile, self.QoS)
 
-            time.sleep(0.5)
+            time.sleep(self.cycle_time)
+            self.ui.progressBar.setValue((counter/self.count)*100)
