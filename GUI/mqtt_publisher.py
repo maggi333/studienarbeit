@@ -1,5 +1,6 @@
 import paho.mqtt.client as paho
 import time
+import math_func as math_func
 import datetime
 
 timestamps = []
@@ -25,16 +26,15 @@ class MQTTPublisher():
         self.QoS = QoS
         self.ui = ui
 
-
-    def calc_latency(self):
-        sum = 0
-        i = 0
-        for item in latency:
-            sum = sum + item
-            i += 1
-        return round(sum / i, 6)
+    def evaluation(self):
+        return math_func.calc_latency(latency)
 
     def start_connect(self):
+        # Löschen der Zwischenspeicherlisten
+        latency.clear()
+        timestamps.clear()
+
+        # Erzeugen eines Testfiles
         testfile = bytearray(b'\x00' * self.packet_size)
 
         client = paho.Client()
@@ -44,11 +44,17 @@ class MQTTPublisher():
 
         client.loop_start()
 
-        for counter in range(1, self.count):
+        for counter in range(0, self.count):
             # timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
             # (rc, mid) = client.publish("mr/time", timestamp, 2)
             timestamps.append(time.time())
             (rc, mid) = client.publish("mr/time", testfile, self.QoS)
 
             time.sleep(self.cycle_time)
-            self.ui.progressBar.setValue((counter/self.count)*100)
+            self.ui.progressBar.setValue((counter / self.count) * 100)
+
+        # WICHTIG: lange genug warten damit jede Nachricht angekommen ist
+        if len(timestamps) > 0:
+            print('Warte 5s')
+            time.sleep(5)
+

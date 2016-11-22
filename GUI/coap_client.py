@@ -1,6 +1,7 @@
 import logging
 import asyncio
 import time
+import math_func
 
 from aiocoap import *
 
@@ -36,18 +37,14 @@ class CoAPClient():
 
         context = await Context.create_client_context()
 
-        await asyncio.sleep(2)
+        await asyncio.sleep(0.5)
 
-        # payload = b"The quick brown fox jumps over the lazy dog.\n" * 30
         payload = bytearray(b'\x00' * self.packet_size)
-        request = Message(code=PUT, payload=payload)
-        request.opt.uri_host = '127.0.0.1'
-        request.opt.uri_path = ("other", "block")
 
-        # TODO: mehrere Nachrichten in Schleife verschicken
-
-
-        for count in range(1, self.count):
+        for count in range(0, self.count):
+            request = Message(code=PUT, payload=payload)
+            request.opt.uri_host = '127.0.0.1'
+            request.opt.uri_path = ("other", "block")
             timestamps.append(time.time())
             response = await context.request(request).response
             latenz = time.time() - timestamps.pop(0)
@@ -55,6 +52,17 @@ class CoAPClient():
             print("Latenz : " + str(latenz) + "s")
             print('Result: %s\n%r' % (response.code, response.payload))
             await asyncio.sleep(self.cycle_time)
+            self.ui.progressBar.setValue((count / self.count) * 100)
+
+        if len(timestamps) > 0:
+            print('Warte 5s')
+            time.sleep(5)
 
     def start_connect(self):
+        # Löschen der Zwischenspeicherlisten
+        latency.clear()
+        timestamps.clear()
         asyncio.get_event_loop().run_until_complete(self.main())
+
+    def evaluation(self):
+        return math_func.calc_latency(latency)

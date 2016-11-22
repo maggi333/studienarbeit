@@ -26,11 +26,10 @@ class BlockResource(resource.Resource):
 
     @asyncio.coroutine
     def render_put(self, request):
-        print('PUT payload: %s' % request.payload)
-        self.content = request.payload
-        payload = ("I've accepted the new payload. You may inspect it here in "\
-                "Python's repr format:\n\n%r"%self.content).encode('utf8')
-        return aiocoap.Message(code=aiocoap.CHANGED, payload=payload)
+    #    print('PUT payload: %s' % request.payload)
+    #    self.content = request.payload
+
+        return aiocoap.Message(code=aiocoap.CHANGED)
 
 
 class SeparateLargeResource(resource.Resource):

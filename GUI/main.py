@@ -36,6 +36,8 @@ class ImageDialog(QDialog):
         self.ui.stopButton.clicked.connect(self.stop)
 
     def start(self):
+        # Zurücksetzen des Fortschrittsbalken
+        self.ui.progressBar.setValue(0)
         # GUI auslesen
         packet_size = int(self.ui.lineEdit.text())
         cycle_time = float(self.ui.lineEdit_2.text())
@@ -49,12 +51,15 @@ class ImageDialog(QDialog):
             self.publisher.start_connect()
 
             # Anzeigen der Auswetung
-            self.ui.pingLabel.setText(str(self.publisher.calc_latency()) + ' s')
+            self.ui.pingLabel.setText(str(self.publisher.evaluation()) + ' s')
 
         elif self.ui.coapButton.isChecked():
 
             self.client = CoAPClient(packet_size, cycle_time, count, self.ui)
             self.client.start_connect()
+
+            # Anzeigen der Auswetung
+            self.ui.pingLabel.setText(str(self.client.evaluation()) + ' s')
 
 
         else:
