@@ -43,6 +43,7 @@ class MQTTPublisher():
         client.connect("localhost", 1883)
 
         client.loop_start()
+        start_time = time.time()
 
         for counter in range(0, self.count):
             # timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
@@ -52,7 +53,7 @@ class MQTTPublisher():
 
             time.sleep(self.cycle_time)
             self.ui.progressBar.setValue((counter / self.count) * 100)
-
+        print(time.time()-start_time)
         # WICHTIG: lange genug warten damit jede Nachricht angekommen ist
         if len(timestamps) > 0:
             print('Warte 5s')

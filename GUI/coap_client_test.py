@@ -2,7 +2,7 @@ import logging
 import asyncio
 import time
 import math_func
-
+import threading
 from aiocoap import *
 
 # This file is part of the Python aiocoap library project.
@@ -18,6 +18,7 @@ logging.basicConfig(level=logging.INFO)
 
 timestamps = []
 latency = []
+threads = []
 
 
 class CoAPClient():
@@ -26,6 +27,7 @@ class CoAPClient():
         self.packet_size = packet_size
         self.count = count
         self.ui = ui
+        self.payload = bytearray(b'\x00' * self.packet_size)
 
     async def main(self):
         """
@@ -39,33 +41,41 @@ class CoAPClient():
 
         await asyncio.sleep(0.5)
 
-        payload = bytearray(b'\x00' * self.packet_size)
+        request = Message(code=PUT, payload=self.payload)
+        request.opt.uri_host = '127.0.0.1'
+        request.opt.uri_path = ("other", "block")
+        timestamps.append(time.time())
+        response = await context.request(request).response
+        latenz = time.time() - timestamps.pop(0)
+        latency.append(latenz)
+        print("Latenz : " + str(latenz) + "s")
+        print('Result: %s\n%r' % (response.code, response.payload))
 
-        for count in range(0, self.count):
-            request = Message(code=PUT, payload=payload)
-            request.opt.uri_host = '127.0.0.1'
-            request.opt.uri_path = ("other", "block")
-            timestamps.append(time.time())
-            response = await context.request(request).response
-            latenz = time.time() - timestamps.pop(0)
-            latency.append(latenz)
-            print("Latenz : " + str(latenz) + "s")
-            print('Result: %s\n%r' % (response.code, response.payload))
-            await asyncio.sleep(self.cycle_time)
-            self.ui.progressBar.setValue((count / self.count) * 100)
-
-        if len(timestamps) > 0:
-            print('Warte 5s')
-            time.sleep(5)
+    def start(self):
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        asyncio.get_event_loop().run_until_complete(self.main())
 
     def start_connect(self):
         # Löschen der Zwischenspeicherlisten
         latency.clear()
         timestamps.clear()
-        loop = asyncio.get_event_loop()
-        start_time = loop.time()
-        loop.run_until_complete(self.main())
-        print(loop.time()-start_time)
+
+        start_time = time.time()
+        for i in range(0, self.count):
+            t = threading.Thread(target=self.start)
+            threads.append(t)
+            t.start()
+            time.sleep(self.cycle_time)
+            self.ui.progressBar.setValue((i / self.count) * 100)
+        print(time.time() - start_time)
+
+        if len(threads) > 0:
+            print('Warte 5s')
+            time.sleep(5)
+            if len(threads) >0:
+                print('Warte 5s')
+                time.sleep(5)
 
     def evaluation(self):
         return math_func.calc_latency(latency)

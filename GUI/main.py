@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QDialog, QApplication
 from design import Ui_Dialog
 
 from mqtt_publisher import MQTTPublisher
-from coap_client import CoAPClient
+from coap_client_test2 import CoAPClient
 
 
 class ImageDialog(QDialog):
