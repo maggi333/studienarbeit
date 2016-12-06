@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QDialog, QApplication
 from design import Ui_Dialog
 
 from mqtt_publisher import MQTTPublisher
-from coap_client_test2 import CoAPClient
+from coap_client import CoAPClient
 import evaluation
 
 class ImageDialog(QDialog):
@@ -16,7 +16,8 @@ class ImageDialog(QDialog):
 
         # ------Make some local modifications-------
 
-        self.ui.pingLabel.setNum(0)
+        self.ui.pingLabel.setText('')
+        self.ui.msg_lostLabel.setText('')
         # self.ui.testList.addItem('test')
         # item = QListWidgetItem()
         # item.setText('test3000')
@@ -50,24 +51,22 @@ class ImageDialog(QDialog):
             self.publisher = MQTTPublisher(packet_size, cycle_time, count, QoS, self.ui)
             msg_send, msg_ack = self.publisher.start_connect()
 
-            # Berechne Auswertung
-            latenz = evaluation.calculate_eval(msg_send, msg_ack)
-
-            # Anzeigen der Auswetung
-            self.ui.pingLabel.setText(str(self.publisher.evaluation()) + ' s' + latenz)
-
         elif self.ui.coapButton.isChecked():
 
             self.client = CoAPClient(packet_size, cycle_time, count, self.ui)
-            self.client.start_connect()
-
-            # Anzeigen der Auswetung
-            self.ui.pingLabel.setText(str(self.client.evaluation()) + ' s')
+            msg_send, msg_ack = self.client.start_connect()
 
 
         else:
             print('Error: No Protocol selected')
             sys.exit(2)
+
+        # Berechne Auswertung
+        latenz, msg_lost = evaluation.calculate_eval(msg_send, msg_ack)
+
+        # Anzeigen der Auswertung
+        self.ui.pingLabel.setText(str(latenz) + ' s')
+        self.ui.msg_lostLabel.setText(str(msg_lost) + ' %')
 
         self.ui.progressBar.setValue(100)
 

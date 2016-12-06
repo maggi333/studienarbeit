@@ -1,9 +1,3 @@
-def calculate_eval(msg_send, msg_ack):
-    latenz_list = create_latenz_list(msg_send, msg_ack)
-    latenz = sum_latenz(latenz_list)
-    print(latenz)
-    return latenz
-
 
 def create_latenz_list(msg_send, msg_ack):
     latenz = []
@@ -22,3 +16,16 @@ def sum_latenz(latenz_list):
         sum = sum + latenz[2]
         i += 1
     return round(sum / i, 6)
+
+
+def calculate_eval(msg_send, msg_ack):
+
+    # Berechne Liste der Latenzen für jede Nachricht
+    latenz_list = create_latenz_list(msg_send, msg_ack)
+
+    # Berechne Durchschnittslatenz
+    latenz = sum_latenz(latenz_list)
+
+    # Berechne Nachrichten Verlust
+    msg_lost = ((len(msg_send) - len(msg_ack)) / len(msg_send)) * 100
+    return latenz, msg_lost
