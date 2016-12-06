@@ -4,7 +4,7 @@ from design import Ui_Dialog
 
 from mqtt_publisher import MQTTPublisher
 from coap_client_test2 import CoAPClient
-
+import evaluation
 
 class ImageDialog(QDialog):
     def __init__(self):
@@ -48,10 +48,13 @@ class ImageDialog(QDialog):
         if self.ui.mqttButton.isChecked():
 
             self.publisher = MQTTPublisher(packet_size, cycle_time, count, QoS, self.ui)
-            self.publisher.start_connect()
+            msg_send, msg_ack = self.publisher.start_connect()
+
+            # Berechne Auswertung
+            latenz = evaluation.calculate_eval(msg_send, msg_ack)
 
             # Anzeigen der Auswetung
-            self.ui.pingLabel.setText(str(self.publisher.evaluation()) + ' s')
+            self.ui.pingLabel.setText(str(self.publisher.evaluation()) + ' s' + latenz)
 
         elif self.ui.coapButton.isChecked():
 
