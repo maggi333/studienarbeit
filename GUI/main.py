@@ -18,9 +18,10 @@ class ImageDialog(QDialog):
 
         self.ui.pingLabel.setText('')
         self.ui.msg_lostLabel.setText('')
-        # self.ui.testList.addItem('test')
-        # item = QListWidgetItem()
-        # item.setText('test3000')
+        self.ui.maxLabel.setText('')
+        self.ui.minLabel.setText('')
+        self.ui.standardLabel.setText('')
+
         self.ui.lineEdit.setText('1024')
         self.ui.lineEdit_2.setText('1')
         self.ui.lineEdit_3.setText('5')
@@ -62,10 +63,13 @@ class ImageDialog(QDialog):
             sys.exit(2)
 
         # Berechne Auswertung
-        latenz, msg_lost = evaluation.calculate_eval(msg_send, msg_ack)
+        latenz, min_lat, max_lat, stdev, msg_lost = evaluation.calculate_eval(msg_send, msg_ack)
 
         # Anzeigen der Auswertung
         self.ui.pingLabel.setText(str(latenz) + ' s')
+        self.ui.minLabel.setText(str(min_lat) + ' s')
+        self.ui.maxLabel.setText(str(max_lat) + ' s')
+        self.ui.standardLabel.setText(str(stdev) + ' s')
         self.ui.msg_lostLabel.setText(str(msg_lost) + ' %')
 
         self.ui.progressBar.setValue(100)

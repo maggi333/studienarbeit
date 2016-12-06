@@ -154,7 +154,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Periodendauer:</string>
+    <string>Sendeintervall:</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_3">
@@ -264,8 +264,8 @@
   <widget class="QLabel" name="label_8">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>280</y>
+     <x>270</x>
+     <y>250</y>
      <width>171</width>
      <height>17</height>
     </rect>
@@ -277,8 +277,86 @@
   <widget class="QLabel" name="msg_lostLabel">
    <property name="geometry">
     <rect>
+     <x>430</x>
+     <y>250</y>
+     <width>67</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_9">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>270</y>
+     <width>171</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Minium Latenz:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_10">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>290</y>
+     <width>171</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Maximum Latenz:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_11">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>310</y>
+     <width>171</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Standartabweichung:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="minLabel">
+   <property name="geometry">
+    <rect>
      <x>180</x>
-     <y>280</y>
+     <y>270</y>
+     <width>67</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="maxLabel">
+   <property name="geometry">
+    <rect>
+     <x>180</x>
+     <y>290</y>
+     <width>67</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="standardLabel">
+   <property name="geometry">
+    <rect>
+     <x>180</x>
+     <y>310</y>
      <width>67</width>
      <height>17</height>
     </rect>

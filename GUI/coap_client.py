@@ -1,7 +1,6 @@
 import logging
 import asyncio
 import time
-import math_func
 import threading
 from aiocoap import *
 
@@ -28,7 +27,7 @@ class CoAPClient():
         self.cycle_time = cycle_time
         self.count = count
         self.ui = ui
-        self.payload = bytearray(b'\x00' * self.packet_size)
+        self.payload = bytearray(b'\x00' * packet_size)
 
     async def main(self):
         """
@@ -40,7 +39,7 @@ class CoAPClient():
 
         context = await Context.create_client_context()
 
-        #await asyncio.sleep(0.5)
+        # await asyncio.sleep(0.5)
 
         request = Message(code=PUT, payload=self.payload)
         request.opt.uri_host = '127.0.0.1'
@@ -71,22 +70,20 @@ class CoAPClient():
         msg_send.clear()
         msg_ack.clear()
 
-        #start_time = time.time()
+        # start_time = time.time()
         for i in range(0, self.count):
             t = threading.Thread(target=self.start)
             threads.append(t)
             t.start()
-            time.sleep(self.cycle_time)
             self.ui.progressBar.setValue((i / self.count) * 100)
-        #print(time.time() - start_time)
+            time.sleep(self.cycle_time)
+
+        # print(time.time() - start_time)
 
         if len(timestamps) > 0:
             print('Warte 5s', len(timestamps))
             time.sleep(5)
-            if len(timestamps) >0:
+            if len(timestamps) > 0:
                 print('Warte 5s', len(timestamps))
                 time.sleep(5)
         return msg_send, msg_ack
-
-    def evaluation(self):
-        return math_func.calc_latency(latency)
