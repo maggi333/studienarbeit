@@ -126,7 +126,7 @@ class Ui_Dialog(object):
         self.msg_lostLabel.setText(_translate("Dialog", "TextLabel"))
         self.label_9.setText(_translate("Dialog", "Minium Latenz:"))
         self.label_10.setText(_translate("Dialog", "Maximum Latenz:"))
-        self.label_11.setText(_translate("Dialog", "Standartabweichung:"))
+        self.label_11.setText(_translate("Dialog", "Standardabweichung:"))
         self.minLabel.setText(_translate("Dialog", "TextLabel"))
         self.maxLabel.setText(_translate("Dialog", "TextLabel"))
         self.standardLabel.setText(_translate("Dialog", "TextLabel"))

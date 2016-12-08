@@ -323,7 +323,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Standartabweichung:</string>
+    <string>Standardabweichung:</string>
    </property>
   </widget>
   <widget class="QLabel" name="minLabel">
