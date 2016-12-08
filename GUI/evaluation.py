@@ -64,21 +64,28 @@ def calculate_eval(msg_send, msg_ack, options):
     latenz_list = create_latenz_list(msg_send, msg_ack)
 
     # Berechne Durchschnittslatenz
-    latenz = round(sum_latenz(latenz_list), 3)
+    latenz = sum_latenz(latenz_list)
 
     # Min/Max/Standartabweichung der Latenz
-    min_lat = round(min(float(s) for s in latenz_list), 3)
-    max_lat = round(max(float(s) for s in latenz_list), 3)
+    min_lat = min(float(s) for s in latenz_list)
+    max_lat = max(float(s) for s in latenz_list)
     try:
-        stdev = round(statistics.stdev(latenz_list), 3)
+        stdev = statistics.stdev(latenz_list)
     except statistics.StatisticsError:  # Wenn nur eine Latenz
-        stdev = round(latenz_list[0], 3)
+        stdev = latenz_list[0]
 
     # Berechne Nachrichten Verlust
-    msg_lost = round(((len(msg_send) - len(msg_ack)) / len(msg_send)) * 100, 3)
+    msg_lost = ((len(msg_send) - len(msg_ack)) / len(msg_send)) * 100
 
     # Schreibe Auswertung in Liste
     evaluation = [latenz, min_lat, max_lat, stdev, msg_lost]
+
+    # Werte Runden für Ausgabe
+    latenz = round(latenz, 3)
+    min_lat = round(min_lat, 3)
+    max_lat = round(max_lat, 3)
+    stdev = round(stdev, 3)
+    msg_lost = round(msg_lost, 3)
 
     # Export to CSV
     createCSV(msg_send, msg_ack, evaluation, options)

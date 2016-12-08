@@ -64,8 +64,7 @@ class MQTTPublisher():
             # TODO Ressource vorher löschen
             client.subscribe("mr/info", self.QoS)
             for counter in range(0, self.count):
-
-                self.testfile[-1] = counter     # setze Makierung
+                self.testfile[-1] = counter  # setze Makierung
                 send_time = time.time()
                 timestamps.append(send_time)
                 (rc, mid) = client.publish("mr/zustand", self.testfile, self.QoS)
