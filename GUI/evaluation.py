@@ -1,4 +1,31 @@
 import statistics
+import csv
+import os
+
+
+def createCSV(msg_send, msg_ack, evaluation):
+    path = "result/0/"
+    i = 0
+    while True:
+
+        if os.path.exists(path):
+            i += 1
+            path = "result/" + str(i) + "/"
+        else:
+            os.makedirs(path)
+            break
+
+    newcsv = open(path + 'msg_send', 'w')
+    wr = csv.writer(newcsv, quoting=csv.QUOTE_ALL)
+    wr.writerow(msg_send)
+
+    newcsv = open(path + 'msg_ack', 'w')
+    wr = csv.writer(newcsv, quoting=csv.QUOTE_ALL)
+    wr.writerow(msg_ack)
+
+    newcsv = open(path + 'evaluation', 'w')
+    wr = csv.writer(newcsv, quoting=csv.QUOTE_ALL)
+    wr.writerow(evaluation)
 
 
 def create_latenz_list(msg_send, msg_ack):
@@ -37,4 +64,7 @@ def calculate_eval(msg_send, msg_ack):
 
     # Berechne Nachrichten Verlust
     msg_lost = round(((len(msg_send) - len(msg_ack)) / len(msg_send)) * 100, 3)
+
+    # Export to CSV
+    createCSV(msg_send, msg_ack, latenz_list)
     return latenz, min_lat, max_lat, stdev, msg_lost

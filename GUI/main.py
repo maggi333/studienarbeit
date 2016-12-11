@@ -6,6 +6,7 @@ from mqtt_publisher import MQTTPublisher
 from coap_client import CoAPClient
 import evaluation
 
+
 class ImageDialog(QDialog):
     def __init__(self):
         super(ImageDialog, self).__init__()
@@ -31,8 +32,6 @@ class ImageDialog(QDialog):
         self.ui.progressBar.setMaximum(100)
         self.ui.progressBar.reset()
 
-
-
         # Connect up the buttons.
         self.ui.startButton.clicked.connect(self.start)
         self.ui.stopButton.clicked.connect(self.stop)
@@ -45,16 +44,17 @@ class ImageDialog(QDialog):
         cycle_time = float(self.ui.lineEdit_2.text())
         count = int(self.ui.lineEdit_3.text())
         QoS = int(self.ui.lineEdit_4.text())
+        extra = self.ui.extra_clientCheckBox.isChecked()
 
         # Starte Verbindung
         if self.ui.mqttButton.isChecked():
 
-            self.publisher = MQTTPublisher(packet_size, cycle_time, count, QoS, self.ui)
+            self.publisher = MQTTPublisher(packet_size, cycle_time, count, QoS, extra, self.ui)
             msg_send, msg_ack = self.publisher.start_connect()
 
         elif self.ui.coapButton.isChecked():
 
-            self.client = CoAPClient(packet_size, cycle_time, count, self.ui)
+            self.client = CoAPClient(packet_size, cycle_time, count, self.ui)  # TODO CoAP mit Extra ergänzen
             msg_send, msg_ack = self.client.start_connect()
 
 

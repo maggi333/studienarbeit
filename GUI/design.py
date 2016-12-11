@@ -102,6 +102,9 @@ class Ui_Dialog(object):
         self.standardLabel = QtWidgets.QLabel(Dialog)
         self.standardLabel.setGeometry(QtCore.QRect(180, 310, 67, 17))
         self.standardLabel.setObjectName("standardLabel")
+        self.extra_clientCheckBox = QtWidgets.QCheckBox(Dialog)
+        self.extra_clientCheckBox.setGeometry(QtCore.QRect(110, 170, 111, 22))
+        self.extra_clientCheckBox.setObjectName("extra_clientCheckBox")
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
@@ -130,4 +133,5 @@ class Ui_Dialog(object):
         self.minLabel.setText(_translate("Dialog", "TextLabel"))
         self.maxLabel.setText(_translate("Dialog", "TextLabel"))
         self.standardLabel.setText(_translate("Dialog", "TextLabel"))
+        self.extra_clientCheckBox.setText(_translate("Dialog", "Extra Client"))
 
