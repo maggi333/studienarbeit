@@ -3,7 +3,7 @@ import csv
 import os
 
 
-def createCSV(msg_send, msg_ack, evaluation):
+def createCSV(msg_send, msg_ack, evaluation, options):
     path = "result/0/"
     i = 0
     while True:
@@ -17,14 +17,24 @@ def createCSV(msg_send, msg_ack, evaluation):
 
     newcsv = open(path + 'msg_send', 'w')
     wr = csv.writer(newcsv, quoting=csv.QUOTE_ALL)
-    wr.writerow(msg_send)
+    wr.writerow(("Message ID", "Time message sended"))
+    for item in msg_send:
+        wr.writerow(item)
 
     newcsv = open(path + 'msg_ack', 'w')
     wr = csv.writer(newcsv, quoting=csv.QUOTE_ALL)
-    wr.writerow(msg_ack)
+    wr.writerow(("Message ID", "Time message acknowleged"))
+    for item in msg_ack:
+        wr.writerow(item)
 
     newcsv = open(path + 'evaluation', 'w')
     wr = csv.writer(newcsv, quoting=csv.QUOTE_ALL)
+    wr.writerow(("MQTT", "CoAP", "Packetgröße", "Sendeintervall", "Anzahl", "QoS(nur MQTT)", "Extra Client"))
+    wr.writerow(options)
+    wr.writerow("")
+    wr.writerow("")
+    wr.writerow(("Durschschnittliche Latenz", "Minimum Latenz", "Maximum Latenz", "Standardabweichung",
+                 "Nachrichten Verlust "))
     wr.writerow(evaluation)
 
 
@@ -48,12 +58,14 @@ def sum_latenz(latenz_list):
     return sum / i
 
 
-def calculate_eval(msg_send, msg_ack):
+def calculate_eval(msg_send, msg_ack, options):
+
     # Berechne Liste der Latenzen für jede Nachricht
     latenz_list = create_latenz_list(msg_send, msg_ack)
 
     # Berechne Durchschnittslatenz
     latenz = round(sum_latenz(latenz_list), 3)
+
     # Min/Max/Standartabweichung der Latenz
     min_lat = round(min(float(s) for s in latenz_list), 3)
     max_lat = round(max(float(s) for s in latenz_list), 3)
@@ -65,6 +77,9 @@ def calculate_eval(msg_send, msg_ack):
     # Berechne Nachrichten Verlust
     msg_lost = round(((len(msg_send) - len(msg_ack)) / len(msg_send)) * 100, 3)
 
+    # Schreibe Auswertung in Liste
+    evaluation = [latenz, min_lat, max_lat, stdev, msg_lost]
+
     # Export to CSV
-    createCSV(msg_send, msg_ack, latenz_list)
+    createCSV(msg_send, msg_ack, evaluation, options)
     return latenz, min_lat, max_lat, stdev, msg_lost

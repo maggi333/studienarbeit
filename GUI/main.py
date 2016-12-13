@@ -46,6 +46,10 @@ class ImageDialog(QDialog):
         QoS = int(self.ui.lineEdit_4.text())
         extra = self.ui.extra_clientCheckBox.isChecked()
 
+        # Erstelle Optionsliste
+        options = [self.ui.mqttButton.isChecked(), self.ui.coapButton.isChecked(), packet_size, cycle_time, count,
+                   QoS, extra]
+
         # Starte Verbindung
         if self.ui.mqttButton.isChecked():
 
@@ -63,7 +67,7 @@ class ImageDialog(QDialog):
             sys.exit(2)
 
         # Berechne Auswertung
-        latenz, min_lat, max_lat, stdev, msg_lost = evaluation.calculate_eval(msg_send, msg_ack)
+        latenz, min_lat, max_lat, stdev, msg_lost = evaluation.calculate_eval(msg_send, msg_ack, options)
 
         # Anzeigen der Auswertung
         self.ui.pingLabel.setText(str(latenz) + ' s')
