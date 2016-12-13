@@ -5,7 +5,9 @@ timestamps = []
 latency = []
 msg_send = []
 msg_ack = []
-msg_sub = []
+
+
+# msg_sub = []
 
 
 def on_connect(client, userdata, flags, rc):
@@ -21,7 +23,11 @@ def on_publish(client, userdata, mid):
 
 
 def on_message(client, userdata, message):
-    msg_ack.append((message, time.time()))
+    msg_ack.append((message.payload[-1], time.time()))
+    latenz = time.time() - timestamps.pop(0)
+    latency.append(latenz)
+    print("Latenz : " + str(latenz) + "s")
+    print("mid: " + str(message.payload[-1]))
 
 
 class MQTTPublisher():
@@ -39,12 +45,12 @@ class MQTTPublisher():
         timestamps.clear()
         msg_send.clear()
         msg_ack.clear()
-        msg_sub.clear()
+        # msg_sub.clear()
 
         client = paho.Client()
         client.on_connect = on_connect
-        client.on_publish = on_publish
-        client.on_message = on_message
+        # client.on_publish = on_publish
+        # client.on_message = on_message
         client.connect("localhost", 1883)
 
         client.loop_start()
@@ -52,10 +58,27 @@ class MQTTPublisher():
 
         # Mit Extra Client?
         if self.extra:
-            pass
+
+            client.on_message = on_message
+
+            # TODO Ressource vorher löschen
+            client.subscribe("mr/info", self.QoS)
+            for counter in range(0, self.count):
+
+                self.testfile[-1] = counter     # setze Makierung
+                send_time = time.time()
+                timestamps.append(send_time)
+                (rc, mid) = client.publish("mr/zustand", self.testfile, self.QoS)
+                msg_send.append((counter, send_time))
+                self.ui.progressBar.setValue((counter / self.count) * 100)
+                time.sleep(self.cycle_time)
+
+            return msg_send, msg_ack
 
 
         elif not self.extra:
+
+            client.on_publish = on_publish
 
             for counter in range(0, self.count):
                 # timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
