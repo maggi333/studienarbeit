@@ -45,6 +45,7 @@ class ImageDialog(QDialog):
         count = int(self.ui.lineEdit_3.text())
         QoS = int(self.ui.lineEdit_4.text())
         extra = self.ui.extra_clientCheckBox.isChecked()
+        getsignal = False
 
         # Erstelle Optionsliste
         options = [self.ui.mqttButton.isChecked(), self.ui.coapButton.isChecked(), packet_size, cycle_time, count,
@@ -53,12 +54,12 @@ class ImageDialog(QDialog):
         # Starte Verbindung
         if self.ui.mqttButton.isChecked():
 
-            self.publisher = MQTTPublisher(packet_size, cycle_time, count, QoS, extra, self.ui)
+            self.publisher = MQTTPublisher(packet_size, cycle_time, count, QoS, extra, self.ui, getsignal)
             msg_send, msg_ack = self.publisher.start_connect()
 
         elif self.ui.coapButton.isChecked():
 
-            self.client = CoAPClient(packet_size, cycle_time, count, self.ui)  # TODO CoAP mit Extra ergänzen
+            self.client = CoAPClient(packet_size, cycle_time, count, self.ui, getsignal)
             msg_send, msg_ack = self.client.start_connect()
 
 

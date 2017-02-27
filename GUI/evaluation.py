@@ -17,7 +17,7 @@ def createCSV(msg_send, msg_ack, evaluation, options):
 
     newcsv = open(path + 'msg_send', 'w')
     wr = csv.writer(newcsv, quoting=csv.QUOTE_ALL)
-    wr.writerow(("Message ID", "Time message sended"))
+    wr.writerow(("Message ID", "Time message sended", "RSRQ", "RSRP", "RSSI", "SINR"))
     for item in msg_send:
         wr.writerow(item)
 
@@ -43,7 +43,7 @@ def create_latenz_list(msg_send, msg_ack):
     msg_send_mid = [item[0] for item in msg_send]
     for mid, ack_time in msg_ack:
         ind = msg_send_mid.index(mid)
-        mid_s, send_time = msg_send[ind]
+        mid_s, send_time, rsrq, rsrp, rssi, sinr = msg_send[ind]
         # latenz.append((mid, mid_s, ack_time - send_time))
         latenz.append(ack_time - send_time)
     return latenz

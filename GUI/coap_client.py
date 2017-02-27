@@ -3,6 +3,8 @@ import asyncio
 import time
 import threading
 from aiocoap import *
+# TODO Framework unabhaenging vom Surfstick machen
+import huaweiE3372
 
 # This file is part of the Python aiocoap library project.
 #
@@ -23,11 +25,12 @@ msg_ack = []
 
 
 class CoAPClient():
-    def __init__(self, packet_size, cycle_time, count, ui):
+    def __init__(self, packet_size, cycle_time, count, ui, getsignal):
         self.cycle_time = cycle_time
         self.count = count
         self.ui = ui
         self.payload = bytearray(b'\x00' * packet_size)
+        self.getsignal = getsignal
 
     async def main(self):
         """
@@ -44,9 +47,13 @@ class CoAPClient():
         request = Message(code=PUT, payload=self.payload)
         request.opt.uri_host = '127.0.0.1'
         request.opt.uri_path = ("other", "block")
+        if self.getsignal:
+            rsrq, rsrp, rssi, sinr = huaweiE3372.signal()  # frage Signalstaerke ab
+        else:
+            rsrq, rsrp, rssi, sinr = 0, 0, 0, 0
         send_time = time.time()
         timestamps.append(send_time)
-        msg_send.append((context.message_id, send_time))
+        msg_send.append((context.message_id, send_time,rsrq, rsrp, rssi, sinr))
         response = await context.request(request).response
         ack_time = time.time()
         try:

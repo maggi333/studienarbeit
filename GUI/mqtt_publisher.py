@@ -1,5 +1,7 @@
 import paho.mqtt.client as paho
 import time
+# TODO Framework unabhaenging vom Surfstick machen
+import huaweiE3372
 
 timestamps = []
 latency = []
@@ -31,13 +33,14 @@ def on_message(client, userdata, message):
 
 
 class MQTTPublisher():
-    def __init__(self, packet_size, cycle_time, count, qos, extra_client, ui):
+    def __init__(self, packet_size, cycle_time, count, qos, extra_client, ui, getsignal):
         self.cycle_time = cycle_time
         self.testfile = bytearray(b'\x00' * packet_size)
         self.count = count
         self.QoS = qos
         self.extra = extra_client
         self.ui = ui
+        self.getsignal = getsignal
 
     def start_connect(self):
         # Löschen der Zwischenspeicherlisten
@@ -65,10 +68,14 @@ class MQTTPublisher():
             client.subscribe("mr/info", self.QoS)
             for counter in range(0, self.count):
                 self.testfile[-1] = counter  # setze Makierung
+                if self.getsignal:
+                    rsrq, rsrp, rssi, sinr = huaweiE3372.signal()  # frage Signalstaerke ab
+                else:
+                    rsrq, rsrp, rssi, sinr = 0, 0, 0, 0
                 send_time = time.time()
                 timestamps.append(send_time)
                 (rc, mid) = client.publish("mr/zustand", self.testfile, self.QoS)
-                msg_send.append((counter, send_time))
+                msg_send.append((counter, send_time, rsrq, rsrp, rssi, sinr))
                 self.ui.progressBar.setValue((counter / self.count) * 100)
                 time.sleep(self.cycle_time)
 
@@ -82,10 +89,14 @@ class MQTTPublisher():
             for counter in range(0, self.count):
                 # timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
                 # (rc, mid) = client.publish("mr/time", timestamp, 2)
+                if self.getsignal:
+                    rsrq, rsrp, rssi, sinr = huaweiE3372.signal()  # frage Signalstaerke ab
+                else:
+                    rsrq, rsrp, rssi, sinr = 0, 0, 0, 0  # frage Signalstaerke ab
                 send_time = time.time()
                 timestamps.append(send_time)
                 (rc, mid) = client.publish("mr/time", self.testfile, self.QoS)
-                msg_send.append((mid, send_time))
+                msg_send.append((mid, send_time, rsrq, rsrp, rssi, sinr))
                 self.ui.progressBar.setValue((counter / self.count) * 100)
                 time.sleep(self.cycle_time)
 
