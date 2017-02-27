@@ -22,6 +22,7 @@ class ImageDialog(QDialog):
         self.ui.maxLabel.setText('')
         self.ui.minLabel.setText('')
         self.ui.standardLabel.setText('')
+        self.ui.speedLabel.setText('')
 
         self.ui.lineEdit.setText('1024')
         self.ui.lineEdit_2.setText('1')
@@ -68,7 +69,7 @@ class ImageDialog(QDialog):
             sys.exit(2)
 
         # Berechne Auswertung
-        latenz, min_lat, max_lat, stdev, msg_lost = evaluation.calculate_eval(msg_send, msg_ack, options)
+        latenz, min_lat, max_lat, stdev, msg_lost, speed = evaluation.calculate_eval(msg_send, msg_ack, options)
 
         # Anzeigen der Auswertung
         self.ui.pingLabel.setText(str(latenz) + ' s')
@@ -76,6 +77,7 @@ class ImageDialog(QDialog):
         self.ui.maxLabel.setText(str(max_lat) + ' s')
         self.ui.standardLabel.setText(str(stdev) + ' s')
         self.ui.msg_lostLabel.setText(str(msg_lost) + ' %')
+        self.ui.speedLabel.setText(str(speed) + ' KB/s')
 
         self.ui.progressBar.setValue(100)
 

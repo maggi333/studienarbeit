@@ -33,8 +33,8 @@ def createCSV(msg_send, msg_ack, evaluation, options):
     wr.writerow(options)
     wr.writerow("")
     wr.writerow("")
-    wr.writerow(("Durschschnittliche Latenz", "Minimum Latenz", "Maximum Latenz", "Standardabweichung",
-                 "Nachrichten Verlust "))
+    wr.writerow(("Durschschnittliche Latenz [s]", "Minimum Latenz [s]", "Maximum Latenz [s]", "Standardabweichung",
+                 "Nachrichten Verlust [%]", "Durschsnittliche Uebertragungsgeschwindigkeit[kb/s]"))
     wr.writerow(evaluation)
 
 
@@ -60,6 +60,8 @@ def sum_latenz(latenz_list):
 
 def calculate_eval(msg_send, msg_ack, options):
 
+    packet_size = options[2]
+
     # Berechne Liste der Latenzen für jede Nachricht
     latenz_list = create_latenz_list(msg_send, msg_ack)
 
@@ -77,8 +79,11 @@ def calculate_eval(msg_send, msg_ack, options):
     # Berechne Nachrichten Verlust
     msg_lost = ((len(msg_send) - len(msg_ack)) / len(msg_send)) * 100
 
+    # Berechne Uebertragungsgeschwindigkeit in kb/s
+    speed = packet_size / (latenz * 1000)
+
     # Schreibe Auswertung in Liste
-    evaluation = [latenz, min_lat, max_lat, stdev, msg_lost]
+    evaluation = [latenz, min_lat, max_lat, stdev, msg_lost, speed]
 
     # Werte Runden für Ausgabe
     latenz = round(latenz, 3)
@@ -86,7 +91,8 @@ def calculate_eval(msg_send, msg_ack, options):
     max_lat = round(max_lat, 3)
     stdev = round(stdev, 3)
     msg_lost = round(msg_lost, 3)
+    speed = round(speed, 3)
 
     # Export to CSV
     createCSV(msg_send, msg_ack, evaluation, options)
-    return latenz, min_lat, max_lat, stdev, msg_lost
+    return latenz, min_lat, max_lat, stdev, msg_lost, speed

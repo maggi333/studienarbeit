@@ -105,6 +105,12 @@ class Ui_Dialog(object):
         self.extra_clientCheckBox = QtWidgets.QCheckBox(Dialog)
         self.extra_clientCheckBox.setGeometry(QtCore.QRect(110, 170, 111, 22))
         self.extra_clientCheckBox.setObjectName("extra_clientCheckBox")
+        self.label_12 = QtWidgets.QLabel(Dialog)
+        self.label_12.setGeometry(QtCore.QRect(270, 270, 191, 17))
+        self.label_12.setObjectName("label_12")
+        self.speedLabel = QtWidgets.QLabel(Dialog)
+        self.speedLabel.setGeometry(QtCore.QRect(430, 270, 91, 17))
+        self.speedLabel.setObjectName("speedLabel")
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
@@ -134,4 +140,6 @@ class Ui_Dialog(object):
         self.maxLabel.setText(_translate("Dialog", "TextLabel"))
         self.standardLabel.setText(_translate("Dialog", "TextLabel"))
         self.extra_clientCheckBox.setText(_translate("Dialog", "Extra Client"))
+        self.label_12.setText(_translate("Dialog", "Durchschn. Geschw.:"))
+        self.speedLabel.setText(_translate("Dialog", "TextLabel"))
 
