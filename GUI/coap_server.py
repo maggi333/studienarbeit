@@ -28,8 +28,7 @@ class BlockResource(resource.Resource):
     def render_put(self, request):
     #    print('PUT payload: %s' % request.payload)
     #    self.content = request.payload
-
-        return aiocoap.Message(code=aiocoap.CHANGED)
+        return aiocoap.Message(code=aiocoap.CHANGED, payload=request.payload)
 
 
 class SeparateLargeResource(resource.Resource):
