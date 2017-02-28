@@ -28,6 +28,7 @@ class BlockResource(resource.Resource):
     def render_put(self, request):
     #    print('PUT payload: %s' % request.payload)
     #    self.content = request.payload
+    #    payload = bytearray(b'\x00' * 100)
         return aiocoap.Message(code=aiocoap.CHANGED, payload=request.payload)
 
 

@@ -14,6 +14,7 @@ def on_publish(client, userdata, mid):
 
 def on_message(client, userdata, message):
 
+    #payload = bytearray(b'\x00' * 100)
     (rc, mid) = client.publish("mr/info", message.payload, qos=1)
 
 client = paho.Client()
