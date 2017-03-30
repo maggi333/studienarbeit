@@ -45,7 +45,7 @@ class CoAPClient():
         # await asyncio.sleep(0.5)
 
         request = Message(code=PUT, payload=self.payload)
-        request.opt.uri_host = '127.0.0.1'
+        request.opt.uri_host = 'localhost'  # hier IP Adresse vom Server eintragen
         request.opt.uri_path = ("other", "block")
         if self.getsignal:
             rsrq, rsrp, rssi, sinr = huaweiE3372.signal()  # frage Signalstaerke ab
@@ -57,13 +57,13 @@ class CoAPClient():
         response = await context.request(request).response
         ack_time = time.time()
         try:
-            msg_ack.append((response.mid - response.opt.block1[0], ack_time))
+            msg_ack.append((response.mid - response.opt.block1[0] * 2, ack_time)) # TODO: Erklärung
         except TypeError:
             msg_ack.append((response.mid, ack_time))
         latenz = time.time() - timestamps.pop(0)
         latency.append(latenz)
         print("Latenz : " + str(latenz) + "s")
-        print('Result: %s\n%r' % (response.code, response.payload))
+        #print('Result: %s\n%r' % (response.code, response.payload))
 
     def start(self):
         loop = asyncio.new_event_loop()

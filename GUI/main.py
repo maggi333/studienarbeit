@@ -17,6 +17,9 @@ class ImageDialog(QDialog):
 
         # ------Make some local modifications-------
 
+        self.ui.extra_clientCheckBox.setChecked(True)
+        self.ui.mqttButton.setChecked(True)
+
         self.ui.pingLabel.setText('')
         self.ui.msg_lostLabel.setText('')
         self.ui.maxLabel.setText('')

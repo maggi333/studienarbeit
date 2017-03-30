@@ -54,7 +54,7 @@ class MQTTPublisher():
         client.on_connect = on_connect
         # client.on_publish = on_publish
         # client.on_message = on_message
-        client.connect("localhost", 1883)
+        client.connect("localhost", 1883) # hier IP Adresse vom Server eintragen
 
         client.loop_start()
         # start_time = time.time()
@@ -79,6 +79,14 @@ class MQTTPublisher():
                 self.ui.progressBar.setValue((counter / self.count) * 100)
                 time.sleep(self.cycle_time)
 
+            if len(timestamps) > 0:
+                print('Warte 5s', len(timestamps))
+                time.sleep(5)
+                if len(timestamps) > 0:
+                    print('Warte 5s', len(timestamps))
+                    time.sleep(5)
+
+            client.disconnect()
             return msg_send, msg_ack
 
 
@@ -103,6 +111,9 @@ class MQTTPublisher():
             # print(time.time()-start_time)
             # WICHTIG: lange genug warten damit jede Nachricht angekommen ist
             if len(timestamps) > 0:
-                print('Warte 5s')
+                print('Warte 5s', len(timestamps))
                 time.sleep(5)
+                if len(timestamps) > 0:
+                    print('Warte 15s', len(timestamps))
+                    time.sleep(5)
             return msg_send, msg_ack
