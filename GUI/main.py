@@ -1,3 +1,6 @@
+__author__ = "Maximilian Rasch"
+__email__ = "maxi.rasch@gmail.com"
+
 import sys
 from PyQt5.QtWidgets import QDialog, QApplication
 from design import Ui_Dialog

@@ -1,3 +1,5 @@
+__author__ = "Maximilian Rasch"
+
 import logging
 import asyncio
 import time

@@ -1,7 +1,7 @@
+__author__ = "Maximilian Rasch"
+
 import paho.mqtt.client as paho
 import time
-
-
 
 
 def on_connect(client, userdata, flags, rc):

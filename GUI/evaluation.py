@@ -1,3 +1,5 @@
+__author__ = "Maximilian Rasch"
+
 import statistics
 import csv
 import os

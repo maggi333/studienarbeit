@@ -1,3 +1,5 @@
+__author__ = "Maximilian Rasch"
+
 def calc_latency(latency):
     sum = 0
     i = 0

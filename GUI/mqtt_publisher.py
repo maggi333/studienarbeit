@@ -1,3 +1,5 @@
+__author__ = "Maximilian Rasch"
+
 import paho.mqtt.client as paho
 import time
 # TODO Framework unabhaenging vom Surfstick machen

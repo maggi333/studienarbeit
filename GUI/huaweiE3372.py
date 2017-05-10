@@ -1,3 +1,5 @@
+__author__ = "Maximilian Rasch"
+
 import urllib.request
 import xmltodict
 
